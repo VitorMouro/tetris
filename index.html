@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tetris</title>
+    <!-- Scripts -->
+
+    <!-- Style -->
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+        let gridWidth = 12;
+        let gridHeight = 22;
+        let cellSize = 40;
+
+        canvas.width = 720;
+        canvas.height = 1280;
+
+
+        class Board {
+            constructor(width, height) {
+                this.grid = new Array(width);
+                for (let i = 0; i < this.grid.length; i++) {
+                    this.grid[i] = new Array(height);
+                }
+            }
+
+            draw(ctx){
+                for (i = 0; i < gridWidth; i++)
+                    for (j = 0; j < gridHeight; j++)
+                        this.grid[i][j].draw(ctx);
+
+            }
+        }
+
+        class Block {
+
+            
+            constructor(color, x, y, width, height) {
+                this.offset = 4;
+                this.color = color;
+                this.position = {
+                    x: x * cellSize,
+                    y: y * cellSize
+                }
+                this.width = width * cellSize;
+                this.height = height * cellSize;
+            }
+
+            draw(ctx) {
+                // Light triangle
+                ctx.fillStyle = "#999999";
+                ctx.beginPath();
+                ctx.moveTo(this.position.x, this.position.y);
+                ctx.lineTo(this.position.x+this.width, this.position.y);
+                ctx.lineTo(this.position.x, this.position.y+this.height);
+                ctx.fill();
+
+                // Dark triangle 
+                ctx.fillStyle = "#333333";
+                ctx.beginPath();
+                ctx.moveTo(this.position.x+this.width, this.position.y+this.height);
+                ctx.lineTo(this.position.x+this.width, this.position.y);
+                ctx.lineTo(this.position.x, this.position.y+this.height);
+                ctx.fill();
+
+                // Rect
+                ctx.fillStyle = "#666666";
+                ctx.fillRect(this.position.x+this.offset, this.position.y+this.offset, this.width-2*this.offset, this.height-2*this.offset);
+
+            }
+        }
+
+
+        let board = new Board(gridWidth, gridHeight);
+        for (i = 0; i < gridWidth; i++)
+            for (j = 0; j < gridHeight; j++)
+                board.grid[i][j] = new Block('blue', i, j, 1, 1);
+
+        board.draw(ctx);
+
+    </script>
+</body>
+
+</html>
