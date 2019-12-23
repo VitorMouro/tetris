@@ -32,6 +32,7 @@
         let rightPressed = false;
         let leftPressed = false;
         let downPressed = false;
+        let spacePressed = false;
 
         canvas.height = window.innerHeight;
         canvas.width = canvas.height * 6 / 11;
@@ -57,7 +58,10 @@
                 piece.update('left');
                 leftPressed = false;
             }
-            
+            else if(spacePressed == true){
+                piece.update('space');
+                spacePressed = false;
+            }
         }
 
         function draw () {
