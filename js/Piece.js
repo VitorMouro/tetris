@@ -59,8 +59,11 @@ class Piece {
         this.color = this.colors[this.id];
         this.position = {
             x: 3,
-            y: -1
+            y: -2
         };
+        this.startingRotation = Math.floor(Math.random() * 4);
+        for (let i = 0; i < this.startingRotation; i++)
+            this.rotate();
 
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
@@ -72,14 +75,25 @@ class Piece {
 
     }
 
-    freeze () {
+    freeze() {
         console.log('FREEZED');
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
-                if (this.config[i][j]){
-                    board.grid[this.position.x + i][this.position.y + j] = new Block(this.color, this.position.x + i, this.position.y + j, 1, 1); 
-                    freezed = true;
+                if (this.config[i][j]) {
+                    if (this.position.y + j < 0) {
+                        gameover = true;
+                        console.log('GAMEOVER');
+                    } else {
+                        if (board.grid[this.position.x + i][this.position.y + j].color == 'grey') {
+                            gameover = true;
+                            console.log('GAMEOVER');
+                        } else {
+                            board.grid[this.position.x + i][this.position.y + j] = new Block(this.color, this.position.x + i, this.position.y + j, 1, 1);
+                            freezed = true;
+                        }
+                    }
                 }
+        board.update();
     }
 
     rotateCounterClockwise(a) {
@@ -114,7 +128,7 @@ class Piece {
         this.rotateCounterClockwise(this.config);
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
-                if (this.config[i][j]) {
+                if (this.config[i][j] && this.position.y >= 0) {
                     this.config[i][j].position.x = (this.position.x + i) * cellSize;
                     this.config[i][j].position.y = (this.position.y + j) * cellSize;
                 }
@@ -140,31 +154,37 @@ class Piece {
                         return false;
                     }
         this.rotateClockwise(this.config);
-        return true;
+        if (this.position.y >= 0)
+            return true;
+        else
+            return false;
     }
 
     canMove(dir) {
         if (dir == 'right') {
             for (let i = 0; i < 5; i++)
                 for (let j = 0; j < 5; j++)
-                    if (this.config[i][j] && board.grid[this.position.x + i + 1][this.position.y + j].color != 'transparent')
-                        return false;
+                    if (this.position.y + j >= 0)
+                        if (this.config[i][j] && board.grid[this.position.x + i + 1][this.position.y + j].color != 'transparent')
+                            return false;
             return true;
         }
         if (dir == 'left') {
             for (let i = 0; i < 5; i++)
                 for (let j = 0; j < 5; j++)
-                    if (this.config[i][j] && board.grid[this.position.x + i - 1][this.position.y + j].color != 'transparent')
-                        return false;
+                    if (this.position.y + j >= 0)
+                        if (this.config[i][j] && board.grid[this.position.x + i - 1][this.position.y + j].color != 'transparent')
+                            return false;
             return true;
         }
         if (dir == 'down') {
             for (let i = 0; i < 5; i++)
                 for (let j = 0; j < 5; j++)
-                    if (this.config[i][j] && board.grid[this.position.x + i][this.position.y + j + 1].color != 'transparent'){
-                        this.freeze();
-                        return false;
-                    }
+                    if (this.position.y + j >= 0)
+                        if (this.config[i][j] && board.grid[this.position.x + i][this.position.y + j + 1].color != 'transparent') {
+                            this.freeze();
+                            return false;
+                        }
             return true;
         }
     }

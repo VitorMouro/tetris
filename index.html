@@ -34,6 +34,7 @@
         let downPressed = false;
         let spacePressed = false;
         let freezed = false;
+        let gameover = false;
 
         canvas.height = window.innerHeight;
         canvas.width = canvas.height * 6 / 11;
@@ -70,7 +71,9 @@
             piece.draw(ctx);
             board.draw(ctx);
         }
-
+        
+        let dt, lastTime = 0, counter = 0;
+        requestAnimationFrame(gameLoop);
         function gameLoop(timestamp) {
             dt = timestamp - lastTime;
             lastTime = timestamp;
@@ -81,8 +84,12 @@
                 freezed = false;
             }
 
+            if (gameover) {
+                return;
+            }
+
             counter += dt;
-            if(counter >= 1000){
+            if(counter >= 500){
                 piece.update('down');
                 counter = 0;
             }
@@ -92,8 +99,6 @@
             
             requestAnimationFrame(gameLoop);
         }
-        let dt, lastTime = 0, counter = 0;
-        requestAnimationFrame(gameLoop);
 
     </script>
 </body>
