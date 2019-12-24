@@ -33,6 +33,7 @@
         let leftPressed = false;
         let downPressed = false;
         let spacePressed = false;
+        let freezed = false;
 
         canvas.height = window.innerHeight;
         canvas.width = canvas.height * 6 / 11;
@@ -72,14 +73,26 @@
 
         function gameLoop(timestamp) {
             dt = timestamp - lastTime;
+            lastTime = timestamp;
+            
+            if(freezed == true){
+                delete piece
+                piece = new Piece();
+                freezed = false;
+            }
+
+            counter += dt;
+            if(counter >= 1000){
+                piece.update('down');
+                counter = 0;
+            }
 
             update();
-
             draw();
             
             requestAnimationFrame(gameLoop);
         }
-        let dt, lastTime = 0;
+        let dt, lastTime = 0, counter = 0;
         requestAnimationFrame(gameLoop);
 
     </script>

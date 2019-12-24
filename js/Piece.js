@@ -3,44 +3,44 @@ class Piece {
         this.pieces = [
 
             [[0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],     //      X
-            [0, 0, 1, 0, 0],     //      X
-            [0, 0, 1, 0, 0],     //      X
-            [0, 0, 1, 0, 0]],    //      X
+            [0, 0, 0, 0, 0],     //      X
+            [0, 1, 1, 1, 1],     //      X
+            [0, 0, 0, 0, 0],     //      X
+            [0, 0, 0, 0, 0]],    //      X
 
             [[0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],    //
+            [0, 0, 1, 1, 0],    //
             [0, 0, 1, 1, 0],    //      X X
-            [0, 0, 1, 1, 0],    //      X X
+            [0, 0, 0, 0, 0],    //      X X
             [0, 0, 0, 0, 0]],   // 
 
             [[0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],   //
-            [0, 0, 1, 1, 1],   //      X X X
-            [0, 0, 1, 0, 0],   //      X
-            [0, 0, 0, 0, 0]],  //
-
-            [[0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],   //      X
-            [0, 0, 1, 1, 1],   //      X X X
-            [0, 0, 0, 0, 0],   //
-            [0, 0, 0, 0, 0]],  //
-
-            [[0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],   //      X
-            [0, 0, 1, 1, 0],   //      X X
-            [0, 0, 0, 1, 0],   //        X
-            [0, 0, 0, 0, 0]],  //
-
-            [[0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],   //        X
-            [0, 1, 1, 0, 0],   //      X X
+            [0, 1, 1, 1, 0],   //      X X X
             [0, 1, 0, 0, 0],   //      X
             [0, 0, 0, 0, 0]],  //
 
             [[0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],   //      X
+            [0, 1, 0, 0, 0],   //      X
+            [0, 1, 1, 1, 0],   //      X X X
+            [0, 0, 0, 0, 0],   //
+            [0, 0, 0, 0, 0]],  //
+
+            [[0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],   //      X
             [0, 0, 1, 1, 0],   //      X X
+            [0, 1, 1, 0, 0],   //        X
+            [0, 0, 0, 0, 0]],  //
+
+            [[0, 0, 0, 0, 0],
+            [0, 1, 1, 0, 0],   //        X
+            [0, 0, 1, 1, 0],   //      X X
+            [0, 0, 0, 0, 0],   //      X
+            [0, 0, 0, 0, 0]],  //
+
+            [[0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],   //      X
+            [0, 1, 1, 1, 0],   //      X X
             [0, 0, 1, 0, 0],   //      X
             [0, 0, 0, 0, 0]],  //
 
@@ -58,8 +58,8 @@ class Piece {
         this.config = this.pieces[this.id];
         this.color = this.colors[this.id];
         this.position = {
-            x: 0,
-            y: 0
+            x: 3,
+            y: -1
         };
 
         for (let i = 0; i < 5; i++)
@@ -70,6 +70,16 @@ class Piece {
                     this.config[i][j] = null;
                 }
 
+    }
+
+    freeze () {
+        console.log('FREEZED');
+        for (let i = 0; i < 5; i++)
+            for (let j = 0; j < 5; j++)
+                if (this.config[i][j]){
+                    board.grid[this.position.x + i][this.position.y + j] = new Block(this.color, this.position.x + i, this.position.y + j, 1, 1); 
+                    freezed = true;
+                }
     }
 
     rotateCounterClockwise(a) {
@@ -101,7 +111,7 @@ class Piece {
     }
 
     rotate() {
-        this.rotateClockwise(this.config);
+        this.rotateCounterClockwise(this.config);
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
                 if (this.config[i][j]) {
@@ -111,7 +121,7 @@ class Piece {
     }
 
     unrotate() {
-        this.rotateCounterClockwise(this.config);
+        this.rotateClockwise(this.config);
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
                 if (this.config[i][j]) {
@@ -121,15 +131,15 @@ class Piece {
     }
 
     canRotate() {
-        this.rotateClockwise(this.config);
+        this.rotateCounterClockwise(this.config);
         for (let i = 0; i < 5; i++)
             for (let j = 0; j < 5; j++)
                 if (this.config[i][j] && (this.position.x + i) >= 0 && (this.position.y + j) >= 0)
                     if (board.grid[this.position.x + i][this.position.y + j].color != 'transparent') {
-                        this.rotateCounterClockwise(this.config);
+                        this.rotateClockwise(this.config);
                         return false;
                     }
-        this.rotateCounterClockwise(this.config);
+        this.rotateClockwise(this.config);
         return true;
     }
 
@@ -151,8 +161,10 @@ class Piece {
         if (dir == 'down') {
             for (let i = 0; i < 5; i++)
                 for (let j = 0; j < 5; j++)
-                    if (this.config[i][j] && board.grid[this.position.x + i][this.position.y + j + 1].color != 'transparent')
+                    if (this.config[i][j] && board.grid[this.position.x + i][this.position.y + j + 1].color != 'transparent'){
+                        this.freeze();
                         return false;
+                    }
             return true;
         }
     }
