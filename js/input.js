@@ -44,7 +44,7 @@ function dragHandler(event) {
             }else{
                 // Down
                 console.log('DRAG DOWN');
-                downPressed = true;
+                dragDown = true;
                 drag_y = 0;
                 return;
             }

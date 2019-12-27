@@ -33,6 +33,7 @@
         let leftPressed = false;
         let downPressed = false;
         let spacePressed = false;
+        let dragDown = false;
         let freezed = false;
         let gameover = false;
 
@@ -63,6 +64,10 @@
             if(spacePressed == true){
                 piece.update('space');
                 spacePressed = false;
+            }
+            if(dragDown == true){
+                piece.update('allDown');
+                dragDown = false;
             }
         }
 

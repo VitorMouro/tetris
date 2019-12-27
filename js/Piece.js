@@ -189,6 +189,12 @@ class Piece {
         }
     }
 
+    allDown () {
+        while(this.canMove('down')) {
+            this.move('down');
+        }
+    }
+
     move(dir) {
         if (dir == 'right') {
             this.position.x += 1;
@@ -215,6 +221,9 @@ class Piece {
     }
 
     update(dir) {
+        if (dir == 'allDown') {
+            this.allDown();
+        }
         if (dir == 'right' && this.canMove(dir)) {
             this.move(dir);
         }
