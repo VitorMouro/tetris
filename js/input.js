@@ -18,10 +18,10 @@ function dragHandler(event) {
     let touch = event.changedTouches[0];
     let drag_x = touch.pageX - click_x;
     let drag_y = touch.pageY - click_y;
-    if(Math.abs(drag_x) < 100 && Math.abs(drag_y) < 100)
+    if(Math.abs(drag_x) < cellSize/2 && Math.abs(drag_y) < cellSize/2)
         spacePressed = true;
-    if(Math.abs(drag_x) > Math.abs(drag_y)){
-        if(Math.abs(drag_x) > cellSize)
+    else if(Math.abs(drag_x) > Math.abs(drag_y)){
+        if(Math.abs(drag_x) > cellSize/2)
             if(drag_x < 0){
                 // Left
                 console.log('DRAG LEFT');
@@ -36,7 +36,7 @@ function dragHandler(event) {
                 return;
             }
     }else{
-        if(Math.abs(drag_y) > cellSize)
+        if(Math.abs(drag_y) > cellSize/2)
             if(drag_y < 0){
                 // Up
                 drag_y = 0;
